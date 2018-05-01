@@ -1,14 +1,12 @@
 import createStore from 'redux-zero';
 import axios from 'axios';
 
-const store = createStore({ results: [], deviceId: '', specials: [], loading: false });
+const store = createStore({ results: [], deviceId: '', specials: [] });
 
 const mapToProps = ({ results, deviceId, specials }) => ({ results, deviceId, specials });
 
 const actions = ({ setState }) => ({
     getResults(state, value) {
-        setState({ loading: true });
-        console.log("loading...");
         return axios.post(
             'https://vision.googleapis.com/v1/images:annotate?key=AIzaSyCTVMHDJUxUdkd9_0NhrKGC-86PObf9QYM',
             {
@@ -25,7 +23,6 @@ const actions = ({ setState }) => ({
                 price: ''
             };
             var results = state.results.concat([{ image: value, product: product }]);
-            console.log("done...");
             return { results: results, deviceId: state.deviceId };
         })
         .catch(error => {
@@ -33,7 +30,6 @@ const actions = ({ setState }) => ({
                 image: value,
                 product: { name: 'unidentified', description: '', price: '' }
             }]);
-            console.log("done...");
             return { results: results, deviceId: state.deviceId };
         })
     },
