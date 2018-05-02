@@ -25,7 +25,8 @@ class ListPage extends Component {
                             <div class="card-media"><img src={result.image} /></div>
                             <div class="card-text">
                                 <div>
-                                    <h1>{result.product && result.product.name}</h1>
+                                    {!result.product && <h1>Unrecognized</h1>}
+                                    {result.product && <h1>{result.product.name}</h1>}
                                     <p>{result.product && result.product.description}<br/>{result.product && "$" + result.product.price}</p>
                                 </div>
                                 <div class="card-actions">
