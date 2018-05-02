@@ -1,9 +1,9 @@
 import createStore from 'redux-zero';
 import axios from 'axios';
 
-const store = createStore({ results: [], deviceId: '' });
+const store = createStore({ results: [], deviceId: '', specials: [], loadingSpecials: false });
 
-const mapToProps = ({ results, deviceId }) => ({ results, deviceId });
+const mapToProps = ({ results, deviceId, specials, loadingSpecials }) => ({ results, deviceId, specials, loadingSpecials });
 
 const actions = ({ setState }) => ({
     getResults(state, value) {
@@ -35,6 +35,7 @@ const actions = ({ setState }) => ({
     },
     setDeviceId(state, value) { return { results: state.results, deviceId: value } },
     getSpecials() {
+        setState({ specials: [], loadingSpecials: true });
         return axios.get('https://testavagoapi.azurewebsites.net/api/deals')
         .then(response => {
             var specials = response.data.map(function(item, index) {
@@ -46,10 +47,10 @@ const actions = ({ setState }) => ({
                     image: item.imageUrl
                 };
             });
-            return { specials: specials };
+            return { specials: specials, loadingSpecials: false };
         })
         .catch(error => {
-            return { specials: [] };
+            return { specials: [], loadingSpecials: false };
         })
     }  
 });
